@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.bulat.newsaggregator.domain.model.NewsItem
 import com.bulat.newsaggregator.domain.usecase.GetNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -42,10 +43,10 @@ class NewsViewModel @Inject constructor(
     }
 
     fun fetchNews() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             uiState = uiState.copy(isLoading = true, error = null)
             try {
-                getNewsUseCase().collect { newsList ->
+                getNewsUseCase.invoke().collect { newsList ->
                     allNews = newsList
                     uiState = uiState.copy(
                         news = filterSortSearchNews(newsList, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),

@@ -19,9 +19,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulat.newsaggregator.R
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import com.bulat.newsaggregator.R
 
 const val NEWS_WEBVIEW_ROUTE = "news_webview"
 const val URL_ARG = "url_arg"

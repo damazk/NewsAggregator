@@ -9,5 +9,5 @@ interface NewsApi {
         @Query("show-fields") showFields: String = "thumbnail,trailText,byline",
         @Query("show-tags") showTags: String = "keyword",
         @Query("order-by") orderBy: String = "newest"
-    ): NewsResponse
+    ): ApiResponse
 }

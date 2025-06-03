@@ -5,10 +5,8 @@ import com.bulat.newsaggregator.data.local.NewsEntity
 import com.bulat.newsaggregator.data.remote.NewsApi
 import com.bulat.newsaggregator.domain.model.NewsItem
 import com.bulat.newsaggregator.domain.repository.NewsRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
@@ -18,7 +16,7 @@ class NewsRepositoryImpl @Inject constructor(
     override fun getNews(): Flow<List<NewsItem>> = flow {
         try {
             val response = api.getNews()
-            val newsList = response.results.articles.map { article ->
+            val newsList = response.response.results.map { article ->
                 NewsItem(
                     title = article.webTitle,
                     description = article.fields?.trailText ?: "",
@@ -36,7 +34,7 @@ class NewsRepositoryImpl @Inject constructor(
             val cached = dao.getAllNews().map { it.toNewsItem() }
             emit(cached)
         }
-    }.flowOn(Dispatchers.IO)
+    }
 }
 
 private fun NewsItem.toEntity() = NewsEntity(

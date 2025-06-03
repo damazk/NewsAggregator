@@ -21,6 +21,11 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            buildConfigField("String", "TAG", "\"newsAggregator\"")
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -38,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

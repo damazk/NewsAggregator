@@ -1,7 +1,12 @@
 package com.bulat.newsaggregator.data.remote
 
+data class ApiResponse(
+    val response: NewsResponse
+)
+
 data class NewsResponse(
-    val results: NewsResults
+    val status: String,
+    val results: List<NewsArticle>
 )
 
 data class NewsResults(
