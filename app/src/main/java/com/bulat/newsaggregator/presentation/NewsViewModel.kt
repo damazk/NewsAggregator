@@ -19,7 +19,7 @@ import javax.inject.Inject
 enum class NewsSortOrder { NEWEST, OLDEST }
 
 data class NewsUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val error: String? = null,
     val news: List<NewsItem> = emptyList(),
     val selectedTag: String? = null,

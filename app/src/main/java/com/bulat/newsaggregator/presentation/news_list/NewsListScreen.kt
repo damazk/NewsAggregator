@@ -1,12 +1,9 @@
 package com.bulat.newsaggregator.presentation.news_list
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,15 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.text.HtmlCompat
-import coil.compose.rememberAsyncImagePainter
 import com.bulat.newsaggregator.R
+import com.bulat.newsaggregator.core.composables.items.NewsListItem
 import com.bulat.newsaggregator.domain.model.NewsItem
 import com.bulat.newsaggregator.presentation.NewsSortOrder
 import com.bulat.newsaggregator.presentation.NewsUiState
@@ -132,78 +125,6 @@ fun TagCloud(tags: List<String>, selectedTag: String?, onTagSelected: (String?) 
                     AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                 else AssistChipDefaults.assistChipColors()
             )
-        }
-    }
-}
-
-@Composable
-fun NewsListItem(item: NewsItem, onClick: () -> Unit) {
-    val formattedDescription = HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            if (!item.imageUrl.isNullOrEmpty()) {
-                Image(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    painter = rememberAsyncImagePainter(item.imageUrl),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = item.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.height(2.dp))
-
-                item.date?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                item.author?.let {
-                    Text(
-                        text = stringResource(R.string.author, it),
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                if (item.tags.isNotEmpty()) {
-                    Text(
-                        text = stringResource(R.string.tags) + " " + item.tags.joinToString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = formattedDescription,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
         }
     }
 }
