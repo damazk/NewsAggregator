@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.data.local
+package com.bulat.newsaggregator.core.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

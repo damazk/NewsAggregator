@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.presentation.news_list
+package com.bulat.newsaggregator.home.presentation.news_list
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.bulat.newsaggregator.R
-import com.bulat.newsaggregator.presentation.NewsViewModel
+import com.bulat.newsaggregator.home.presentation.NewsViewModel
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 

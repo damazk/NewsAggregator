@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.data.remote
+package com.bulat.newsaggregator.core.data.remote
 
 data class ApiResponse(
     val response: NewsResponse

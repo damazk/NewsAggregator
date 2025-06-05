@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.presentation.news_webview
+package com.bulat.newsaggregator.home.presentation.news_webview
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup

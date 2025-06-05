@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.presentation
+package com.bulat.newsaggregator.home.presentation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bulat.newsaggregator.domain.model.NewsItem
-import com.bulat.newsaggregator.domain.usecase.GetNewsUseCase
+import com.bulat.newsaggregator.core.domain.model.NewsItem
+import com.bulat.newsaggregator.core.domain.usecase.GetNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

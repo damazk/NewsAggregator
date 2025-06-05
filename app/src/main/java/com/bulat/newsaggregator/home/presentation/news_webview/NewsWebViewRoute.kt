@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.presentation.news_webview
+package com.bulat.newsaggregator.home.presentation.news_webview
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

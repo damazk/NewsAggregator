@@ -1,8 +1,9 @@
 package com.bulat.newsaggregator.presentation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.bulat.newsaggregator.domain.model.NewsItem
-import com.bulat.newsaggregator.domain.usecase.GetNewsUseCase
+import com.bulat.newsaggregator.core.domain.model.NewsItem
+import com.bulat.newsaggregator.core.domain.usecase.GetNewsUseCase
+import com.bulat.newsaggregator.home.presentation.NewsViewModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk

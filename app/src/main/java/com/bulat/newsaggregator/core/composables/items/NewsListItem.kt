@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import coil.compose.rememberAsyncImagePainter
 import com.bulat.newsaggregator.R
-import com.bulat.newsaggregator.domain.model.NewsItem
+import com.bulat.newsaggregator.core.domain.model.NewsItem
 import com.bulat.newsaggregator.ui.theme.NewsAggregatorTheme
 
 @Composable

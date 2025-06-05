@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.presentation.news_list
+package com.bulat.newsaggregator.home.presentation.news_list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,9 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bulat.newsaggregator.R
 import com.bulat.newsaggregator.core.composables.items.NewsListItem
-import com.bulat.newsaggregator.domain.model.NewsItem
-import com.bulat.newsaggregator.presentation.NewsSortOrder
-import com.bulat.newsaggregator.presentation.NewsUiState
+import com.bulat.newsaggregator.core.domain.model.NewsItem
+import com.bulat.newsaggregator.home.presentation.NewsSortOrder
+import com.bulat.newsaggregator.home.presentation.NewsUiState
 
 @Composable
 fun NewsListScreen(

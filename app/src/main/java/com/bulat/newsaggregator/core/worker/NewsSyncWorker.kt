@@ -1,10 +1,10 @@
-package com.bulat.newsaggregator.worker
+package com.bulat.newsaggregator.core.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.bulat.newsaggregator.domain.repository.NewsRepository
+import com.bulat.newsaggregator.core.domain.repository.NewsRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first

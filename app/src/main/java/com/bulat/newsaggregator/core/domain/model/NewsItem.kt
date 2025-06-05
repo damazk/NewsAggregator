@@ -1,4 +1,4 @@
-package com.bulat.newsaggregator.domain.model
+package com.bulat.newsaggregator.core.domain.model
 
 data class NewsItem(
     val title: String,

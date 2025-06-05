@@ -1,7 +1,7 @@
 package com.bulat.newsaggregator.data
 
-import com.bulat.newsaggregator.data.local.NewsEntity
-import com.bulat.newsaggregator.domain.model.NewsItem
+import com.bulat.newsaggregator.core.data.local.NewsEntity
+import com.bulat.newsaggregator.core.domain.model.NewsItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

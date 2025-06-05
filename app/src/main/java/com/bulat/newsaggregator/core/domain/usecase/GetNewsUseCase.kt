@@ -1,6 +1,6 @@
-package com.bulat.newsaggregator.domain.usecase
+package com.bulat.newsaggregator.core.domain.usecase
 
-import com.bulat.newsaggregator.domain.repository.NewsRepository
+import com.bulat.newsaggregator.core.domain.repository.NewsRepository
 import javax.inject.Inject
 
 class GetNewsUseCase @Inject constructor(

@@ -1,10 +1,10 @@
-package com.bulat.newsaggregator.data.repository
+package com.bulat.newsaggregator.core.data.repository
 
-import com.bulat.newsaggregator.data.local.NewsDao
-import com.bulat.newsaggregator.data.local.NewsEntity
-import com.bulat.newsaggregator.data.remote.NewsApi
-import com.bulat.newsaggregator.domain.model.NewsItem
-import com.bulat.newsaggregator.domain.repository.NewsRepository
+import com.bulat.newsaggregator.core.data.local.NewsDao
+import com.bulat.newsaggregator.core.data.local.NewsEntity
+import com.bulat.newsaggregator.core.data.remote.NewsApi
+import com.bulat.newsaggregator.core.domain.model.NewsItem
+import com.bulat.newsaggregator.core.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

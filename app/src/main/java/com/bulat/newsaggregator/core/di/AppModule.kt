@@ -1,12 +1,12 @@
-package com.bulat.newsaggregator.di
+package com.bulat.newsaggregator.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.bulat.newsaggregator.data.local.AppDatabase
-import com.bulat.newsaggregator.data.local.NewsDao
-import com.bulat.newsaggregator.data.remote.NewsApi
-import com.bulat.newsaggregator.data.repository.NewsRepositoryImpl
-import com.bulat.newsaggregator.domain.repository.NewsRepository
+import com.bulat.newsaggregator.core.data.local.AppDatabase
+import com.bulat.newsaggregator.core.data.local.NewsDao
+import com.bulat.newsaggregator.core.data.remote.NewsApi
+import com.bulat.newsaggregator.core.data.repository.NewsRepositoryImpl
+import com.bulat.newsaggregator.core.domain.repository.NewsRepository
 import com.google.gson.GsonBuilder
 import dagger.Binds
 import dagger.Module
