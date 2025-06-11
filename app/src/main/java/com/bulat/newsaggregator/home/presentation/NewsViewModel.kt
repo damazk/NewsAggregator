@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bulat.newsaggregator.core.domain.model.NewsItem
-import com.bulat.newsaggregator.core.domain.usecase.GetNewsUseCase
+import com.bulat.newsaggregator.core.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ data class NewsUiState(
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val getNewsUseCase: GetNewsUseCase
+    private val newsRepository: NewsRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(NewsUiState())
@@ -46,7 +46,7 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             uiState = uiState.copy(isLoading = true, error = null)
             try {
-                getNewsUseCase.invoke().collect { newsList ->
+                newsRepository.getNews().collect { newsList ->
                     allNews = newsList
                     uiState = uiState.copy(
                         news = filterSortSearchNews(newsList, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),

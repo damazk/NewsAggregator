@@ -5,7 +5,6 @@ import com.bulat.newsaggregator.core.data.local.NewsEntity
 import com.bulat.newsaggregator.core.data.remote.NewsApi
 import com.bulat.newsaggregator.core.domain.model.NewsItem
 import com.bulat.newsaggregator.core.domain.repository.NewsRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -13,28 +12,52 @@ class NewsRepositoryImpl @Inject constructor(
     private val api: NewsApi,
     private val dao: NewsDao
 ) : NewsRepository {
-    override fun getNews(): Flow<List<NewsItem>> = flow {
-        try {
-            val response = api.getNews()
-            val newsList = response.response.results.map { article ->
-                NewsItem(
-                    title = article.webTitle,
-                    description = article.fields?.trailText ?: "",
-                    imageUrl = article.fields?.thumbnail,
-                    link = article.webUrl,
-                    date = article.webPublicationDate,
-                    author = article.byline,
-                    tags = article.tags?.map { it.webTitle } ?: emptyList()
-                )
+
+    override fun getNews() = flow {
+            try {
+                val response = api.getNews().execute()
+                val body = response.body()
+
+                when {
+                    response.isSuccessful && body != null -> {
+                        val newsList = body.response.results.map { article ->
+                            NewsItem(
+                                title = article.webTitle,
+                                description = article.fields?.trailText ?: "",
+                                imageUrl = article.fields?.thumbnail,
+                                link = article.webUrl,
+                                date = article.webPublicationDate,
+                                author = article.byline,
+                                tags = article.tags?.map { it.webTitle } ?: emptyList()
+                            )
+                        }
+
+                        dao.clearAll()
+                        dao.insertAll(newsList.map { it.toEntity() })
+
+                        val result = Result.success(newsList)
+
+                        emit(result)
+                    }
+                    !response.isSuccessful -> {
+                        val exception = Exception(response.errorBody().toString())
+                        val result = Result.failure<List<NewsItem>>(exception)
+                        emit(result)
+                    }
+                    body == null -> {
+                        val exception = Exception("Failed to get data. Response body is empty.")
+                        val result = Result.failure<List<NewsItem>>(exception)
+                        emit(result)
+                    }
+                }
+
+            } catch (e: Exception) {
+//                val cached = dao.getAllNews().map { it.toNewsItem() }
+//                emit(cached)
+                val result = Result.failure<List<NewsItem>>(e)
+                emit(result)
             }
-            dao.clearAll()
-            dao.insertAll(newsList.map { it.toEntity() })
-            emit(newsList)
-        } catch (e: Exception) {
-            val cached = dao.getAllNews().map { it.toNewsItem() }
-            emit(cached)
         }
-    }
 }
 
 private fun NewsItem.toEntity() = NewsEntity(

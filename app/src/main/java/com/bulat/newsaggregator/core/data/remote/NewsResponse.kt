@@ -1,7 +1,7 @@
 package com.bulat.newsaggregator.core.data.remote
 
-data class ApiResponse(
-    val response: NewsResponse
+data class NetworkResponse<T>(
+    val response: T
 )
 
 data class NewsResponse(
