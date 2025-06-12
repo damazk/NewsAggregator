@@ -22,6 +22,7 @@ data class NewsUiState(
     val isLoading: Boolean = true,
     val error: String? = null,
     val news: List<NewsItem> = emptyList(),
+    val tags: List<String> = emptyList(),
     val selectedTag: String? = null,
     val sortOrder: NewsSortOrder = NewsSortOrder.NEWEST,
     val searchQuery: String = ""
@@ -36,26 +37,23 @@ class NewsViewModel @Inject constructor(
     var uiState by mutableStateOf(NewsUiState())
         private set
 
-    private var allNews: List<NewsItem> = emptyList()
-
     init {
         fetchNews()
     }
 
-    fun fetchNews() {
-        viewModelScope.launch(Dispatchers.IO) {
-            uiState = uiState.copy(isLoading = true, error = null)
-            try {
-                newsRepository.getNews().collect { newsList ->
-                    allNews = newsList
-                    uiState = uiState.copy(
-                        news = filterSortSearchNews(newsList, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),
-                        isLoading = false,
-                        error = null
-                    )
-                }
-            } catch (e: Exception) {
-                uiState = NewsUiState(error = e.message)
+    fun fetchNews() = viewModelScope.launch(Dispatchers.IO) {
+        uiState = uiState.copy(isLoading = true, error = null)
+
+        newsRepository.getNews().collect { result ->
+            result.onSuccess {
+                uiState = uiState.copy(
+                    news = filterSortSearchNews(it, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),
+                    tags = uiState.news.flatMap { it.tags }.distinct().sorted(),
+                    isLoading = false,
+                    error = null
+                )
+            }.onFailure {
+                uiState = NewsUiState(error = it.message)
             }
         }
     }
@@ -63,23 +61,21 @@ class NewsViewModel @Inject constructor(
     fun selectTag(tag: String?) {
         uiState = uiState.copy(
             selectedTag = tag,
-            news = filterSortSearchNews(allNews, tag, uiState.sortOrder, uiState.searchQuery)
+            news = filterSortSearchNews(uiState.news, tag, uiState.sortOrder, uiState.searchQuery)
         )
     }
-
-    fun getAllTags() = allNews.flatMap { it.tags }.distinct().sorted()
 
     fun setSortOrder(order: NewsSortOrder) {
         uiState = uiState.copy(
             sortOrder = order,
-            news = filterSortSearchNews(allNews, uiState.selectedTag, order, uiState.searchQuery)
+            news = filterSortSearchNews(uiState.news, uiState.selectedTag, order, uiState.searchQuery)
         )
     }
 
     fun setSearchQuery(query: String) {
         uiState = uiState.copy(
             searchQuery = query,
-            news = filterSortSearchNews(allNews, uiState.selectedTag, uiState.sortOrder, query)
+            news = filterSortSearchNews(uiState.news, uiState.selectedTag, uiState.sortOrder, query)
         )
     }
 

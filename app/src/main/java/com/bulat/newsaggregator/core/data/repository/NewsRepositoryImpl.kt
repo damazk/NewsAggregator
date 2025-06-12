@@ -14,50 +14,55 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
 
     override fun getNews() = flow {
-            try {
-                val response = api.getNews().execute()
-                val body = response.body()
+        try {
+            val response = api.getNews().execute()
+            val body = response.body()
 
-                when {
-                    response.isSuccessful && body != null -> {
-                        val newsList = body.response.results.map { article ->
-                            NewsItem(
-                                title = article.webTitle,
-                                description = article.fields?.trailText ?: "",
-                                imageUrl = article.fields?.thumbnail,
-                                link = article.webUrl,
-                                date = article.webPublicationDate,
-                                author = article.byline,
-                                tags = article.tags?.map { it.webTitle } ?: emptyList()
-                            )
-                        }
-
-                        dao.clearAll()
-                        dao.insertAll(newsList.map { it.toEntity() })
-
-                        val result = Result.success(newsList)
-
-                        emit(result)
+            when {
+                response.isSuccessful && body != null -> {
+                    val newsList = body.response.results.map { article ->
+                        NewsItem(
+                            title = article.webTitle,
+                            description = article.fields?.trailText ?: "",
+                            imageUrl = article.fields?.thumbnail,
+                            link = article.webUrl,
+                            date = article.webPublicationDate,
+                            author = article.byline,
+                            tags = article.tags?.map { it.sectionId } ?: emptyList()
+                        )
                     }
-                    !response.isSuccessful -> {
-                        val exception = Exception(response.errorBody().toString())
-                        val result = Result.failure<List<NewsItem>>(exception)
-                        emit(result)
-                    }
-                    body == null -> {
-                        val exception = Exception("Failed to get data. Response body is empty.")
-                        val result = Result.failure<List<NewsItem>>(exception)
-                        emit(result)
-                    }
+
+                    dao.clearAll()
+                    dao.insertAll(newsList.map { it.toEntity() })
+
+                    val result = Result.success(newsList)
+
+                    emit(result)
                 }
-
-            } catch (e: Exception) {
-//                val cached = dao.getAllNews().map { it.toNewsItem() }
-//                emit(cached)
-                val result = Result.failure<List<NewsItem>>(e)
-                emit(result)
+                !response.isSuccessful -> {
+                    val exception = Exception(response.errorBody().toString())
+                    val result = Result.failure<List<NewsItem>>(exception)
+                    emit(result)
+                }
+                body == null -> {
+                    val exception = Exception("Failed to get data. Response body is empty.")
+                    val result = Result.failure<List<NewsItem>>(exception)
+                    emit(result)
+                }
+                else -> {
+                    val exception = Exception("Unknown state")
+                    val result = Result.failure<List<NewsItem>>(exception)
+                    emit(result)
+                }
             }
+
+        } catch (e: Exception) {
+            // val cached = dao.getAllNews().map { it.toNewsItem() }
+            // emit(cached)
+            val result = Result.failure<List<NewsItem>>(e)
+            emit(result)
         }
+    }
 }
 
 private fun NewsItem.toEntity() = NewsEntity(

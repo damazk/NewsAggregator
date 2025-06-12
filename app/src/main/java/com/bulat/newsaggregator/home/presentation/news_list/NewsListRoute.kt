@@ -36,7 +36,7 @@ fun NewsListRoute(
 ) {
 
     val uiState = viewModel.uiState
-    val tags = viewModel.getAllTags()
+    val tags = uiState.tags
     val selectedTag = uiState.selectedTag
     val sortOrder = uiState.sortOrder
     val searchQuery = uiState.searchQuery

@@ -9,10 +9,6 @@ data class NewsResponse(
     val results: List<NewsArticle>
 )
 
-data class NewsResults(
-    val articles: List<NewsArticle>
-)
-
 data class NewsArticle(
     val webTitle: String,
     val webUrl: String,
@@ -28,5 +24,5 @@ data class NewsFields(
 )
 
 data class NewsTag(
-    val webTitle: String
+    val sectionId: String
 ) 
