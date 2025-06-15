@@ -2,6 +2,7 @@ package com.bulat.newsaggregator.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.bulat.newsaggregator.BuildConfig
 import com.bulat.newsaggregator.core.data.local.AppDatabase
 import com.bulat.newsaggregator.core.data.local.NewsDao
 import com.bulat.newsaggregator.core.data.remote.NewsApi
@@ -32,12 +33,10 @@ class AppModuleProvider {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        val apiKey = "test"
-
         val apiKeyInterceptor = object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 val requestWithApiKey = chain.request().newBuilder()
-                    .addHeader("api-key", apiKey)
+                    .addHeader("api-key", BuildConfig.API_KEY)
                     .build()
                 return chain.proceed(requestWithApiKey)
             }
@@ -54,10 +53,9 @@ class AppModuleProvider {
     fun provideRetrofit(client: OkHttpClient): Retrofit {
 
         val gson = GsonBuilder().setLenient().create()
-        val baseUrl = "https://content.guardianapis.com/"
 
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

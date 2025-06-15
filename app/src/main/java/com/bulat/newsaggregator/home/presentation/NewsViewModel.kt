@@ -37,6 +37,8 @@ class NewsViewModel @Inject constructor(
     var uiState by mutableStateOf(NewsUiState())
         private set
 
+    private var allNews = emptyList<NewsItem>()
+
     init {
         fetchNews()
     }
@@ -46,9 +48,11 @@ class NewsViewModel @Inject constructor(
 
         newsRepository.getNews().collect { result ->
             result.onSuccess {
+                allNews = it
+
                 uiState = uiState.copy(
-                    news = filterSortSearchNews(it, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),
-                    tags = uiState.news.flatMap { it.tags }.distinct().sorted(),
+                    news = filterSortSearchNews(allNews, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),
+                    tags = allNews.flatMap { it.tags }.distinct().sorted(),
                     isLoading = false,
                     error = null
                 )
@@ -61,21 +65,21 @@ class NewsViewModel @Inject constructor(
     fun selectTag(tag: String?) {
         uiState = uiState.copy(
             selectedTag = tag,
-            news = filterSortSearchNews(uiState.news, tag, uiState.sortOrder, uiState.searchQuery)
+            news = filterSortSearchNews(allNews, tag, uiState.sortOrder, uiState.searchQuery)
         )
     }
 
     fun setSortOrder(order: NewsSortOrder) {
         uiState = uiState.copy(
             sortOrder = order,
-            news = filterSortSearchNews(uiState.news, uiState.selectedTag, order, uiState.searchQuery)
+            news = filterSortSearchNews(allNews, uiState.selectedTag, order, uiState.searchQuery)
         )
     }
 
     fun setSearchQuery(query: String) {
         uiState = uiState.copy(
             searchQuery = query,
-            news = filterSortSearchNews(uiState.news, uiState.selectedTag, uiState.sortOrder, query)
+            news = filterSortSearchNews(allNews, uiState.selectedTag, uiState.sortOrder, query)
         )
     }
 

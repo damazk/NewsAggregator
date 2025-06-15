@@ -24,6 +24,8 @@ android {
 
         debug {
             buildConfigField("String", "TAG", "\"newsAggregator\"")
+            buildConfigField("String", "BASE_URL", "\"https://content.guardianapis.com/\"")
+            buildConfigField("String", "API_KEY", "\"test\"")
         }
 
         release {
