@@ -54,10 +54,9 @@ class NewsViewModel @Inject constructor(
                     news = filterSortSearchNews(allNews, uiState.selectedTag, uiState.sortOrder, uiState.searchQuery),
                     tags = allNews.flatMap { it.tags }.distinct().sorted(),
                     isLoading = false,
-                    error = null
                 )
             }.onFailure {
-                uiState = NewsUiState(error = it.message)
+                uiState = NewsUiState(error = it.message, isLoading = false)
             }
         }
     }

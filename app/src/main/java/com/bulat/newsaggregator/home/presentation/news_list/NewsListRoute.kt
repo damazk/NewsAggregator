@@ -36,10 +36,6 @@ fun NewsListRoute(
 ) {
 
     val uiState = viewModel.uiState
-    val tags = uiState.tags
-    val selectedTag = uiState.selectedTag
-    val sortOrder = uiState.sortOrder
-    val searchQuery = uiState.searchQuery
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -55,19 +51,21 @@ fun NewsListRoute(
     ) { paddings ->
         NewsListScreen(
             modifier = Modifier.padding(paddings),
-            uiState = uiState,
             onNewsClick = { newsItem ->
                 val encodedUrl = URLEncoder.encode(newsItem.link, StandardCharsets.UTF_8.toString())
                 navigateToNewsWebView(encodedUrl)
             },
             onRefresh = { viewModel.fetchNews() },
-            tags = tags,
-            selectedTag = selectedTag,
+            tags = uiState.tags,
+            selectedTag = uiState.selectedTag,
             onTagSelected = { viewModel.selectTag(it) },
-            sortOrder = sortOrder,
+            sortOrder = uiState.sortOrder,
             onSortOrderChange = { viewModel.setSortOrder(it) },
-            searchQuery = searchQuery,
-            onSearchQueryChange = { viewModel.setSearchQuery(it) }
+            searchQuery = uiState.searchQuery,
+            onSearchQueryChange = { viewModel.setSearchQuery(it) },
+            news = uiState.news,
+            isLoading = uiState.isLoading,
+            error = uiState.error
         )
     }
 }

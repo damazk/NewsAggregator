@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,17 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulat.newsaggregator.R
 import com.bulat.newsaggregator.core.composables.items.NewsListItem
 import com.bulat.newsaggregator.core.domain.model.NewsItem
 import com.bulat.newsaggregator.home.presentation.NewsSortOrder
-import com.bulat.newsaggregator.home.presentation.NewsUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsListScreen(
     modifier: Modifier = Modifier,
-    uiState: NewsUiState,
+    news: List<NewsItem>,
+    isLoading: Boolean,
+    error: String?,
     onNewsClick: (NewsItem) -> Unit,
     onRefresh: () -> Unit,
     tags: List<String>,
@@ -65,17 +69,18 @@ fun NewsListScreen(
         Box(Modifier.fillMaxSize().weight(1f)) {
             when {
 
-                uiState.isLoading -> {
+                isLoading -> {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
 
-                uiState.error != null -> {
+                error != null -> {
                     Column(
                         modifier = Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = stringResource(R.string.error, uiState.error),
+                            text = stringResource(R.string.error, error),
+                            textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -83,17 +88,23 @@ fun NewsListScreen(
                     }
                 }
 
-                uiState.news.isEmpty() -> {
+                news.isEmpty() -> {
                     Text(stringResource(R.string.no_news), modifier = Modifier.align(Alignment.Center))
                 }
 
                 else -> {
-                    LazyColumn(
+                    PullToRefreshBox(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        isRefreshing = isLoading,
+                        onRefresh = onRefresh
                     ) {
-                        items(uiState.news) {
-                            NewsListItem(it, onClick = { onNewsClick(it) })
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(news) {
+                                NewsListItem(it, onClick = { onNewsClick(it) })
+                            }
                         }
                     }
                 }
