@@ -7,18 +7,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulat.newsaggregator.R
+import com.bulat.newsaggregator.core.composables.drop_down_menus.SortMenu
 import com.bulat.newsaggregator.core.composables.items.NewsListItem
+import com.bulat.newsaggregator.core.composables.items.TagItem
 import com.bulat.newsaggregator.core.domain.model.NewsItem
 import com.bulat.newsaggregator.home.presentation.NewsSortOrder
 
@@ -59,7 +56,7 @@ fun NewsListScreen(
             )
             Spacer(Modifier.width(5.dp))
             if (tags.isNotEmpty())
-                TagCloud(
+                TagClouds(
                     tags = tags,
                     selectedTag = selectedTag,
                     onTagSelected = onTagSelected
@@ -114,72 +111,24 @@ fun NewsListScreen(
 }
 
 @Composable
-fun TagCloud(tags: List<String>, selectedTag: String?, onTagSelected: (String?) -> Unit) {
+fun TagClouds(tags: List<String>, selectedTag: String?, onTagSelected: (String?) -> Unit) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item {
-            AssistChip(
+            TagItem(
                 onClick = { onTagSelected(null) },
-                label = { Text(stringResource(R.string.all)) },
-                colors = if (selectedTag == null)
-                    AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-                else AssistChipDefaults.assistChipColors()
+                tagText = stringResource(R.string.all),
+                isSelected = selectedTag == null,
             )
         }
         items(tags) { tag ->
-            AssistChip(
+            TagItem(
                 onClick = { onTagSelected(tag) },
-                label = { Text(tag) },
-                colors = if (selectedTag == tag)
-                    AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-                else AssistChipDefaults.assistChipColors()
+                tagText = tag,
+                isSelected = selectedTag == tag
             )
         }
     }
 }
-
-@Composable
-fun SortMenu(
-    modifier: Modifier = Modifier,
-    sortOrder: NewsSortOrder,
-    onSortOrderChange: (NewsSortOrder) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(modifier) {
-
-        Button(
-            onClick = { expanded = !expanded },
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp)
-        ) {
-            Text(
-                if (sortOrder == NewsSortOrder.NEWEST) stringResource(R.string.newest_first)
-                else stringResource(R.string.oldest_first)
-            )
-            Spacer(Modifier.width(3.dp))
-            Icon(
-                painter = painterResource(R.drawable.ic_round_sort_24),
-                contentDescription = stringResource(R.string.sort_by)
-            )
-        }
-
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.newest_first)) },
-                onClick = {
-                    onSortOrderChange(NewsSortOrder.NEWEST)
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.oldest_first)) },
-                onClick = {
-                    onSortOrderChange(NewsSortOrder.OLDEST)
-                    expanded = false
-                }
-            )
-        }
-    }
-} 
